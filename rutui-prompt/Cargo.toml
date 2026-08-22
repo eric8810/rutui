@@ -1,0 +1,33 @@
+[package]
+name = "rutui-prompt"
+version = "0.1.0"
+# NOTE (W5): values are spelled out explicitly so the crate also builds as a
+# non-member path dependency of xai-grok-pager (same pattern as
+# rutui-widgets). The root Cargo.toml lists framework crates as workspace
+# members; until this crate is wired there, the inherited forms (`workspace = true`)
+# would break non-member builds, so versions are pinned to match
+# `[workspace.dependencies]`.
+edition = "2024"
+license = "Apache-2.0"
+description = "Multi-line prompt editor for TUIs: textarea, paste/image chips, ghost text, completion dropdown, fuzzy history search."
+
+[dependencies]
+rutui-theme = { path = "../rutui-theme" }
+rutui-input = { path = "../rutui-input" }
+rutui-ratatui-textarea = { path = "../rutui-ratatui-textarea" }
+ratatui = { version = "0.29", features = ["crossterm", "unstable-widget-ref"] }
+crossterm = "0.28"
+nucleo = { git = "https://github.com/helix-editor/nucleo.git", rev = "5b74652" }
+serde_json = "1"
+regex = "1"
+unicode-width = "0.2"
+tracing = "0.1"
+
+[dev-dependencies]
+serial_test = "3"
+
+[features]
+# Exposes `#[cfg(feature = "test-support")]` test-only helpers (mock setters
+# for private editor state) to downstream crates' test builds. Enabled from
+# xai-grok-pager's `[dev-dependencies]`, same convention as rutui-theme.
+test-support = []

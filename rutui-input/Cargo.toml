@@ -1,0 +1,37 @@
+[package]
+name = "rutui-input"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "Terminal input handling: key shortcuts, modifier normalization, mouse scroll state machine, and a generic ActionRegistry keybinding registry."
+
+[dependencies]
+# Presentation-primitives layer (terminal detection / capability classification).
+rutui-theme = { path = "../rutui-theme" }
+
+# Prompt text input (line editor L0)
+rutui-ratatui-textarea = { workspace = true }
+
+crossterm = { workspace = true, features = ["event-stream", "bracketed-paste"] }
+
+# Scroll flight recorder
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+
+# Default scroll-log path resolution ($GROK_HOME / home dir fallback).
+dirs = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+# Theme test-support: `ModifierDelivery::new_for_test` etc. used by the
+# keyboard-normalizer tests (mirrors the pager's dev-dep).
+rutui-theme = { path = "../rutui-theme", features = ["test-support"] }
+
+[features]
+# Exposes theme test-only helpers to this crate's test builds (and, via
+# `default-bazel`, to sibling crates' test builds later if needed).
+test-support = ["rutui-theme/test-support"]
+default-bazel = ["test-support"]
+

@@ -1,0 +1,86 @@
+[package]
+name = "rutui-core"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "Block-style conversation-history rendering pipeline (scrollback), extracted from xai-grok-pager"
+
+[dependencies]
+# Presentation-primitives layer (W1 extraction) — theme/render/appearance/terminal/util
+rutui-theme = { path = "../rutui-theme" }
+
+# Streaming markdown renderer. Renamed W-close-out: was `xai-grok-markdown`
+# (generic terminal markdown renderer, zero business deps: pulldown-cmark /
+# syntect / two-face only — now `rutui-markdown`). The scrollback block
+# pipeline (agent/thinking/btw blocks, hyperlinks, mermaid detection) is
+# inseparably built on its `StreamingMarkdownRenderer` /
+# `HyperlinkTarget` / `CodeBlockSpan` surface, so it is taken as-is.
+rutui-markdown = { workspace = true }
+
+ratatui = { workspace = true, features = ["crossterm", "unstable-widget-ref"] }
+crossterm = { workspace = true }
+textwrap = { workspace = true }
+unicode-width = { workspace = true }
+unicode-segmentation = { workspace = true }
+
+# Diff line tagging / hunk text (scrollback diff + edit blocks)
+similar = { workspace = true }
+
+# Search matcher (scrollback in-document search) + text selection
+regex = { workspace = true }
+
+# Channel/scaffolding used by scrollback state
+indexmap = { workspace = true }
+
+# enum_delegate for the RenderBlock dispatch over BlockContent
+enum_delegate = { workspace = true }
+
+# ScratchBuffer Deref/DerefMut over ratatui Buffer
+derive_more = { workspace = true }
+
+# Diagnostic logging inside scrollback state/search paths
+tracing = { workspace = true }
+
+# URL parsing (web-search tool blocks) + decoding (tool paths)
+url = { workspace = true }
+urlencoding = { workspace = true }
+
+# Timestamp formatting (entry timestamps)
+chrono = { workspace = true }
+
+# Tab expansion is provided by rutui-theme::appearance; nothing further needed here.
+
+# Mermaid diagram source hashing (blocks/mermaid_content.rs)
+blake3 = { workspace = true }
+
+# Syntax highlighting infrastructure (edit blocks, execute headers):
+# the `Syntect` handle type lives in rutui-markdown; core uses syntect
+# directly for per-hunk highlighting and hosts the theme-keyed cache.
+syntect = { workspace = true }
+
+# Single-line editor for the scrollback search bar. W4 coupling point 6:
+# W3 landed `rutui-input` while this extraction was in flight; the pager's
+# own `input::line_editor` now re-exports it, and `panes.rs` (which must keep
+# compiling) matches the search bar's edit outcome against that same type —
+# so this crate takes `rutui-input` directly (without modifying its source).
+rutui-input = { path = "../rutui-input" }
+# `SingleLineViewport` appears in the public `ScrollbackSearchState` API.
+rutui-ratatui-textarea = { workspace = true }
+
+# Bash command display wrapping (execute tool-call header): tree-sitter-bash
+# operator awareness, copied from xai-grok-workspace's `bash_command_splitting`.
+tree-sitter = "0.25.10"
+tree-sitter-bash = "0.25"
+
+# serde for the context-info wire data (ContextInfo / TokenUsageCategory)
+serde = { workspace = true }
+
+[dev-dependencies]
+# test-support unlocks rutui-theme test-only seams (theme cache test lock)
+rutui-theme = { path = "../rutui-theme", features = ["test-support"] }
+pretty_assertions = { workspace = true }
+insta = { workspace = true }
+image = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+

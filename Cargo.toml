@@ -1,0 +1,103 @@
+[workspace]
+resolver = "2"
+members = [
+    "rutui-theme",
+    "rutui-widgets",
+    "rutui-input",
+    "rutui-core",
+    "rutui-prompt",
+    "rutui-foundations",
+    "rutui-markdown",
+    "rutui-markdown-core",
+    "rutui-ratatui-textarea",
+    "rutui-ratatui-inline",
+    "rutui-tty-utils",
+]
+
+[workspace.package]
+edition = "2024"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+# framework crates (inter-referenced path deps)
+rutui-theme = { path = "rutui-theme" }
+rutui-widgets = { path = "rutui-widgets" }
+rutui-input = { path = "rutui-input" }
+rutui-core = { path = "rutui-core" }
+rutui-prompt = { path = "rutui-prompt" }
+rutui-foundations = { path = "rutui-foundations" }
+rutui-markdown = { path = "rutui-markdown" }
+rutui-markdown-core = { path = "rutui-markdown-core" }
+rutui-ratatui-textarea = { path = "rutui-ratatui-textarea" }
+rutui-ratatui-inline = { path = "rutui-ratatui-inline" }
+rutui-tty-utils = { path = "rutui-tty-utils" }
+# external dependencies (auto-extracted from grok-build's root workspace manifest)
+ansi-width = "0.1"
+anstyle = "1.0"
+anstyle-lossy = "1.1.4"
+anstyle-parse = "0.2"
+anstyle-syntect = "1.0.4"
+anyhow = { version = "1", features = ["backtrace"] }
+arboard = "3.6"
+base64 = "0.22"
+blake3 = "1"
+chrono = "0.4"
+colored_json = "5"
+criterion = "0.6"
+crossterm = "0.28"
+derive_more = { version = "2", features = ["add", "add_assign", "debug", "deref", "deref_mut", "display", "from", "from_str", "into", "into_iterator", "try_into"] }
+dirs = "5.0"
+documented = "0.9"
+dunce = "1"
+enum_delegate = "0.2"
+fuzzy-matcher = "0.3.7"
+html-escape = "0.2"
+ignore = "0.4"
+image = { version = "0.25.10", default-features = false }
+indexmap = { version = "2", features = ["serde"] }
+insta = "1"
+itertools = "0.14"
+libc = "0.2"
+linkify = "0.10"
+lipsum = "0.9"
+nix = { version = "0.30", features = ["poll", "process", "signal", "sched", "term", "mount", "fs", "ioctl", "mman", "reboot", "user"] }
+parking_lot = "0.12.4"
+pretty_assertions = "1"
+pulldown-cmark = "0.13"
+rand = "0.9"
+ratatui = { version = "0.29" }
+ratatui-core = "0.1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serial_test = "3"
+similar = "2.7"
+strum = { version = "0.27", features = ["derive"] }
+supports-color = "3.0"
+syntect = "5.3"
+tempfile = "3"
+termwiz = { version = "0.23", default-features = false }
+textwrap = "0.16"
+tokio = { version = "1", features = ["full"] }
+toml = "0.9"
+toml_edit = "0.22"
+tracing = "0.1"
+tui-scrollbar = "0.2"
+two-face = { version = "0.4", default-features = false, features = ["syntect-fancy"] }
+unicode-bidi = "0.3"
+unicode-bidi-mirroring = "0.4"
+unicode-segmentation = "1.12.0"
+unicode-width = "0.2"
+url = "2"
+urlencoding = "2"
+vte = "0.15.0"
+windows = { version = "0.61", features = ["Win32_Security", "Win32_Security_Authorization", "Win32_Foundation", "Win32_System_Threading", "Win32_System_JobObjects", "Win32_System_Console", "Win32_System_Pipes"] }
+
+[workspace.lints.clippy]
+doc_lazy_continuation = "allow"
+doc_overindented_list_items = "allow"
+needless_lifetimes = "allow"
+single_range_in_vec_init = "allow"
+too_many_arguments = "allow"
+uninlined_format_args = "allow"
+useless_format = "allow"

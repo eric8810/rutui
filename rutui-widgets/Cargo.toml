@@ -1,0 +1,28 @@
+[package]
+name = "rutui-widgets"
+version = "0.1.0"
+# NOTE (W2): values are spelled out explicitly so the crate also builds as a
+# non-member path dependency of xai-grok-pager. The root Cargo.toml already
+# lists the crate as a workspace member; the inherited forms remain an option:
+#   edition = "2024"
+#   ratatui     = { workspace = true, features = [...] }
+#   crossterm   = { workspace = true }
+#   unicode-width = { workspace = true }
+#   [lints] workspace = true
+edition = "2024"
+license = "Apache-2.0"
+description = "Generic ratatui widgets: modal-window chrome, overlays, progress bars, and a shortcuts bar."
+
+[dependencies]
+# KeyShortcut the shortcuts bar binds to by default (single definition lives
+# in rutui-input; the KeyHint bridge impl is in `key.rs`).
+rutui-input = { path = "../rutui-input" }
+rutui-theme = { path = "../rutui-theme" }
+ratatui = { version = "0.29", features = ["crossterm", "unstable-widget-ref"] }
+crossterm = "0.28"
+unicode-width = "0.2"
+
+[dev-dependencies]
+# Modal-window tests flip the global vim-mode cache and the EMBEDDED switch;
+# `serial_test` keeps those tests from racing (same pattern as rutui-theme).
+serial_test = { workspace = true }

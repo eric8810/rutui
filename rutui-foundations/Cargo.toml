@@ -1,0 +1,28 @@
+[package]
+name = "rutui-foundations"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "TUI foundations: the lowest-level, business-agnostic building blocks of the Grok Build TUI framework. Umbrella crate re-exporting the textarea, inline-viewport, and TTY-safety primitives."
+
+# ----------------------------------------------------------------------------
+# 框架可移植性约定（拷走时零改名成本）
+#
+# 本 crate 是「框架」的最底层。为了让整棵框架子树日后能整体拷到别的项目，
+# 源码里**不出现 `xai-` 前缀**：三个 L0 crate 在这里被改名（rename）成不带
+# 前缀的本地名。下游框架 crate（theme/widgets/core）一律通过这些本地名引用，
+# 于是 `xai-` 只存在于本文件的 manifest 里 —— 拷走时 sed 一遍各 Cargo.toml
+# 即可，`.rs` 源码一行不动。
+#
+#   ratatui-textarea  →  textarea
+#   ratatui-inline    →  inline
+#   tty-utils         →  tty_utils
+# ----------------------------------------------------------------------------
+
+[dependencies]
+# 显式 path（不走 workspace 继承），因为改名后的依赖名（textarea/inline/…）
+# 与 workspace.dependencies 里的 key（rutui-ratatui-textarea/…）不一致。
+textarea = { package = "rutui-ratatui-textarea", path = "../rutui-ratatui-textarea" }
+inline = { package = "rutui-ratatui-inline", path = "../rutui-ratatui-inline" }
+tty_utils = { package = "rutui-tty-utils", path = "../rutui-tty-utils" }
+
