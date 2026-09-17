@@ -91,7 +91,7 @@ pub fn count_detail(count: u64, noun: &str) -> String {
 }
 
 /// Context usage breakdown for session info.
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(default, rename_all = "camelCase")]
 pub struct ContextInfo {
     pub used: u64,
@@ -120,6 +120,31 @@ pub struct ContextInfo {
     /// partial snapshots.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub usage_categories: Vec<TokenUsageCategory>,
+}
+
+/// Historical default for `auto_compact_threshold_percent`: the bottom tier
+/// of the 6-tier resolution (env > user per-model > user global > GB
+/// per-model > GB global > 85). Kept in sync with the field-level serde
+/// default so `ContextInfo::default()` and old JSON snapshots agree.
+impl Default for ContextInfo {
+    fn default() -> Self {
+        Self {
+            used: 0,
+            total: 0,
+            system_prompt_tokens: 0,
+            tool_definitions_count: 0,
+            tool_definitions_tokens: 0,
+            compaction_count: 0,
+            turn_count: 0,
+            tool_call_count: 0,
+            message_count: 0,
+            message_tokens: 0,
+            free_tokens: 0,
+            usage_pct: 0,
+            auto_compact_threshold_percent: DEFAULT_AUTO_COMPACT_THRESHOLD_PERCENT,
+            usage_categories: Vec::new(),
+        }
+    }
 }
 
 impl ContextInfo {

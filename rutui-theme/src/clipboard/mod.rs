@@ -11,11 +11,11 @@
 
 mod trust;
 
+pub use rutui_ratatui_textarea::{ClipboardProvider, InternalClipboard};
 pub use trust::{
     ClipboardDelivery, ClipboardEnvironment, NativeClipboardPreflight, Osc52Capability,
     expected_delivery, native_clipboard_preflight,
 };
-pub use rutui_ratatui_textarea::{ClipboardProvider, InternalClipboard};
 
 use std::sync::OnceLock;
 
@@ -473,10 +473,7 @@ fn write_tmux_buffer(text: &str) -> bool {
         #[allow(clippy::disallowed_methods)] // short-lived clipboard helper, waited on below
         let mut child = cmd.spawn()?;
         // Bounded wait: a wedged tmux server must not freeze the UI thread.
-        let status = wait_with_deadline(
-            &mut child,
-            std::time::Duration::from_secs(2),
-        )?;
+        let status = wait_with_deadline(&mut child, std::time::Duration::from_secs(2))?;
         if !status.success() {
             return Err(format!("tmux load-buffer exited with {status}").into());
         }
@@ -1075,7 +1072,10 @@ pub fn system_primary_selection_get() -> Option<String> {
         return None;
     }
     match host() {
-        Some(h) => (h.get_primary_text)().ok().flatten().filter(|text| !text.is_empty()),
+        Some(h) => (h.get_primary_text)()
+            .ok()
+            .flatten()
+            .filter(|text| !text.is_empty()),
         None => None,
     }
 }
@@ -2633,29 +2633,36 @@ mod tests {
             ..test_host()
         });
         let path = default_copy_fallback_path();
-        assert_eq!(path, Some(std::path::PathBuf::from("/tmp/grok-home/last-copy.txt")));
+        assert_eq!(
+            path,
+            Some(std::path::PathBuf::from("/tmp/grok-home/last-copy.txt"))
+        );
     }
 
     /// Toast paths collapse the home prefix to `~` (grok-home paths go
     /// through the shared `abbreviate_path` convention, covered further by
     /// the `GROK_HOME`-override integration test in `xai-grok-pager`).
+    ///
+    /// Asserts against `abbreviate_home` directly: `display_copy_path`
+    /// delegates to the process-global host adapter once one is installed
+    /// (`install_host` is first-call-wins via a `OnceLock`), and other tests
+    /// in this binary install a host — so the fallback arm is not reliably
+    /// observable through `display_copy_path` under parallel test execution.
     #[test]
     fn display_copy_path_abbreviates_home() {
-        if std::env::var_os("GROK_HOME").is_none() {
-            let home = dirs::home_dir().expect("home resolves in tests");
-            assert_eq!(
-                display_copy_path(&home.join(".grok").join("last-copy.txt")),
-                "~/.grok/last-copy.txt"
-            );
-        }
+        let home = std::env::var("HOME").expect("HOME set in test env");
+        assert_eq!(
+            abbreviate_home(std::path::Path::new(&format!("{home}/.grok/last-copy.txt"))),
+            "~/.grok/last-copy.txt"
+        );
         // Non-home paths pass through untouched — including multi-byte
         // UTF-8 components (must never slice at a non-char boundary).
         assert_eq!(
-            display_copy_path(std::path::Path::new("/tmp/grok-0/last-copy.txt")),
+            abbreviate_home(std::path::Path::new("/tmp/grok-0/last-copy.txt")),
             "/tmp/grok-0/last-copy.txt"
         );
         assert_eq!(
-            display_copy_path(std::path::Path::new("/tmp/日本語/コピー.txt")),
+            abbreviate_home(std::path::Path::new("/tmp/日本語/コピー.txt")),
             "/tmp/日本語/コピー.txt"
         );
     }

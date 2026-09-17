@@ -920,11 +920,23 @@ where
                     // origin up, so committed content is preserved instead of
                     // overwritten. Minimal mode (and any inline consumer) relies
                     // on this when growing the viewport for an overlay near the
-                    // bottom of the screen. The pager builds without the
-                    // `scrolling-regions` feature; that variant is a separate
-                    // (unused-by-the-pager) path left as a TODO.
+                    // bottom of the screen.
                     #[cfg(not(feature = "scrolling-regions"))]
                     self.scroll_up(overflow)?;
+                    // Same guarantee on the scrolling-regions backend path:
+                    // scroll the committed rows above the viewport (region
+                    // `0..viewport_top`) up by `overflow`, pushing them into
+                    // native scrollback instead of overwriting them — the
+                    // region-scroll equivalent of the `scroll_up` above, in
+                    // line with how `insert_before_scrolling_regions` scrolls.
+                    #[cfg(feature = "scrolling-regions")]
+                    {
+                        let viewport_top = self.viewport_area.y;
+                        if viewport_top > 0 {
+                            self.backend
+                                .scroll_region_up(0..viewport_top, overflow.min(viewport_top))?;
+                        }
+                    }
                     self.viewport_area.y.saturating_sub(overflow)
                 } else {
                     self.viewport_area.y

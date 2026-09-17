@@ -97,8 +97,10 @@ mod tests {
         ]];
         let patch = diff_hunks_to_patch("a.rs", &hunks);
         assert!(patch.starts_with("--- a/a.rs\n+++ b/a.rs\n@@ -1,1 +1,1 @@\n"));
-        assert_eq!(patch.matches('-').count(), 3); // header + content
-        assert_eq!(patch.matches('+').count(), 3);
+        // Header `---` (3), hunk header `@@ -1,1` (1), content prefix (1) = 5.
+        assert_eq!(patch.matches('-').count(), 5);
+        // Same shape for `+`: `+++`, `@@ ... +1,1`, `+let x = 2;`.
+        assert_eq!(patch.matches('+').count(), 5);
     }
 
     #[test]

@@ -155,6 +155,21 @@ mod links {
             self.appended_lines += n;
             Ok(())
         }
+        // Gated exactly like the trait items they implement (ratatui-core's
+        // `scrolling-regions` feature) so this mock compiles with and without
+        // `--all-features`.
+        #[cfg(feature = "scrolling-regions")]
+        fn scroll_region_up(&mut self, _region: std::ops::Range<u16>, n: u16) -> io::Result<()> {
+            // Scrolling the top `n` rows of the region out of the screen is the
+            // scrolling-regions equivalent of `append_lines(n)` — count it the
+            // same way so grow-path tests pass on both feature sets.
+            self.appended_lines += n;
+            Ok(())
+        }
+        #[cfg(feature = "scrolling-regions")]
+        fn scroll_region_down(&mut self, _region: std::ops::Range<u16>, _n: u16) -> io::Result<()> {
+            Ok(())
+        }
         fn size(&self) -> io::Result<Size> {
             Ok(Size::new(80, 24))
         }

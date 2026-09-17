@@ -318,8 +318,7 @@ fn bash_quote_aware_wrap(line: &str, width: usize, max_rows: usize) -> Vec<&str>
                         }
                     }
                     row_start = force_end;
-                    while row_start < line.len()
-                        && line.as_bytes()[row_start].is_ascii_whitespace()
+                    while row_start < line.len() && line.as_bytes()[row_start].is_ascii_whitespace()
                     {
                         row_start += 1;
                     }
@@ -714,9 +713,9 @@ mod tests {
     fn operator_breaks_ignored_inside_quotes() {
         let script = "echo 'a && b'; c";
         let breaks = soft_break_offsets_after_operators(script);
-        // Only the real `;` after the quoted string, and the `&&` noise must
-        // be absent.
-        assert_eq!(breaks, vec![12]);
+        // Only the real `;` (byte 13) after the quoted string, and the `&&`
+        // noise must be absent. Break offset = end byte of the operator.
+        assert_eq!(breaks, vec![14]);
     }
 
     #[test]
