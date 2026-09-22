@@ -3,6 +3,7 @@ name = "rutui-ratatui-inline"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
+repository = "https://github.com/eric8810/rutui"
 description = "An inline / scrollback-native viewport engine for ratatui terminals."
 authors = ["xAI"]
 

@@ -29,7 +29,7 @@ rutui-foundations = { path = "rutui-foundations" }
 rutui-markdown = { path = "rutui-markdown", version = "0.1.0" }
 rutui-markdown-core = { path = "rutui-markdown-core", version = "0.1.0" }
 rutui-ratatui-textarea = { path = "rutui-ratatui-textarea", version = "0.1.0" }
-rutui-ratatui-inline = { path = "rutui-ratatui-inline" }
+rutui-ratatui-inline = { path = "rutui-ratatui-inline", version = "0.1.0" }
 rutui-tty-utils = { path = "rutui-tty-utils", version = "0.1.0" }
 # external dependencies (auto-extracted from grok-build's root workspace manifest)
 ansi-width = "0.1"
