@@ -3,10 +3,10 @@
 use ratatui::style::Style;
 use ratatui::text::{Span, Text};
 
-use rutui_theme::appearance::AppearanceConfig;
-use crate::inline_media::inline_media_reserved_rows;
-use rutui_theme::prompt_images::{InlineMediaInfo, ScrollbackImageRef, ScrollbackVideoRef};
 use crate::diff::DiffHunk;
+use crate::inline_media::inline_media_reserved_rows;
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::prompt_images::{InlineMediaInfo, ScrollbackImageRef, ScrollbackVideoRef};
 // Imported (rather than referenced as `crate::…`) so the default trait method
 // below stays free of `crate::` tokens: `#[enum_delegate::register]` captures
 // default method bodies into a generated macro, where `crate::` trips
@@ -1203,10 +1203,7 @@ impl RenderBlock {
     /// (pre-wrap line index, display-cell column range). The caller is
     /// responsible for mapping through word-wrapping and entry layout to
     /// reach screen coordinates.
-    pub fn with_hyperlinks<R>(
-        &self,
-        f: impl FnOnce(&[rutui_markdown::HyperlinkTarget]) -> R,
-    ) -> R {
+    pub fn with_hyperlinks<R>(&self, f: impl FnOnce(&[rutui_markdown::HyperlinkTarget]) -> R) -> R {
         match self {
             RenderBlock::AgentMessage(b) => b.content().with_hyperlinks(f),
             RenderBlock::Thinking(b) => b.content().with_hyperlinks(f),
@@ -1231,11 +1228,11 @@ impl RenderBlock {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rutui_theme::appearance::AppearanceConfig;
     use crate::scrollback::DisplayMode;
     use crate::scrollback::types::BlockLine;
     use pretty_assertions::assert_eq;
     use ratatui::text::{Line, Span};
+    use rutui_theme::appearance::AppearanceConfig;
 
     fn ctx(mode: DisplayMode, is_running: bool) -> BlockContext {
         BlockContext {
@@ -1474,11 +1471,11 @@ mod tests {
 #[cfg(test)]
 mod searchable_text_tests {
     use super::*;
+    use crate::context_info::ContextInfo;
     use crate::scrollback::blocks::SearchLineMatch;
     use crate::scrollback::blocks::tool::memory_search::{MemoryResult, MemorySearchToolCallBlock};
     use crate::scrollback::blocks::tool::{LifecycleEventBlock, WebSearchToolCallBlock};
     use std::time::Duration;
-    use crate::context_info::ContextInfo;
 
     #[test]
     fn system_indexes_message_text() {

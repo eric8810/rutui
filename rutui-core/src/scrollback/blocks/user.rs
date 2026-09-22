@@ -6,11 +6,11 @@ use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span};
 use unicode_width::UnicodeWidthStr;
 
-use rutui_theme::render::wrapping::{RtOptions, word_wrap_line_with_joiners};
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode, Selectable,
 };
+use rutui_theme::render::wrapping::{RtOptions, word_wrap_line_with_joiners};
 
 const USER_PROMPT_BODY_RANGE: u16 = 0;
 /// Max visible lines when a user prompt is collapsed.

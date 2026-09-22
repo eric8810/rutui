@@ -27,8 +27,8 @@ use crossterm::event::KeyEvent;
 
 use super::entry::EntryId;
 use super::state::ScrollbackState;
-use rutui_input::line_editor::{LineEditOutcome, LineEditor};
 use crate::text_matcher::{QueryKind, TextMatcher};
+use rutui_input::line_editor::{LineEditOutcome, LineEditor};
 
 /// A located query match within the scrollback.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -397,11 +397,7 @@ impl ScrollbackSearchState {
         }
     }
 
-    pub fn apply_query_key(
-        &mut self,
-        key: &KeyEvent,
-        state: &ScrollbackState,
-    ) -> LineEditOutcome {
+    pub fn apply_query_key(&mut self, key: &KeyEvent, state: &ScrollbackState) -> LineEditOutcome {
         let outcome = self.editor.handle_key(key);
         if outcome == LineEditOutcome::TextChanged {
             self.update_derived_query(state);
@@ -409,11 +405,7 @@ impl ScrollbackSearchState {
         outcome
     }
 
-    pub fn apply_query_paste(
-        &mut self,
-        text: &str,
-        state: &ScrollbackState,
-    ) -> LineEditOutcome {
+    pub fn apply_query_paste(&mut self, text: &str, state: &ScrollbackState) -> LineEditOutcome {
         let outcome = self.editor.insert_paste(text);
         if outcome == LineEditOutcome::TextChanged {
             self.update_derived_query(state);

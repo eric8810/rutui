@@ -11,12 +11,12 @@ use ratatui::style::Modifier;
 use ratatui::text::{Line, Span};
 
 use super::tool::HookRunEntry;
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::wrapping::word_wrap_lines;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockContext, BlockLine, BlockOutput, DisplayMode, Selectable,
 };
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::wrapping::word_wrap_lines;
 use rutui_theme::theme::Theme;
 use rutui_theme::util::format_duration;
 
@@ -256,9 +256,7 @@ impl SessionEvent {
                  Use /new to start a new session."
                     .to_string()
             }
-            SessionEvent::DiskFull => {
-                crate::error_display::DISK_FULL_USER_MESSAGE.to_string()
-            }
+            SessionEvent::DiskFull => crate::error_display::DISK_FULL_USER_MESSAGE.to_string(),
             SessionEvent::CompactCompleted { elapsed } => {
                 format!("Compaction completed in {}.", format_duration(*elapsed))
             }

@@ -117,7 +117,11 @@ impl VisibleLinkMap {
     /// each frame's links will accumulate.
     pub fn append_from_overlay(&mut self, overlay: &LinkOverlay) {
         let start_len = self.links.len();
-        self.push_overlay_links(overlay, start_len, rutui_theme::terminal::terminal_context());
+        self.push_overlay_links(
+            overlay,
+            start_len,
+            rutui_theme::terminal::terminal_context(),
+        );
     }
 
     /// Push overlay segments, merging same-id+same-target only with entries
@@ -187,7 +191,9 @@ impl VisibleLinkMap {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rutui_theme::render::osc8::{LinkOverlay, LinkPresentation, OverlayLink, resolve_link_target};
+    use rutui_theme::render::osc8::{
+        LinkOverlay, LinkPresentation, OverlayLink, resolve_link_target,
+    };
     use rutui_theme::terminal::{TerminalContext, TerminalName};
     use std::sync::Arc;
 
@@ -318,7 +324,9 @@ mod tests {
                 col_start: 4,
                 col_end: 15,
                 target: target.clone(),
-                presentation: rutui_theme::render::osc8::file_link_presentation(painted, &target, cwd),
+                presentation: rutui_theme::render::osc8::file_link_presentation(
+                    painted, &target, cwd,
+                ),
                 id: None,
             });
             overlay

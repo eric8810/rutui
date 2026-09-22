@@ -669,7 +669,8 @@ pub fn render_scrolled_entries_with_selection_boundaries(
                     // hit box and OSC 8 underline must sit on the drawn glyphs.
                     // Identity (one range) under LTR / no reorder.
                     let plain = crate::scrollback::types::line_plain_text(&bl.content);
-                    for (vs, ve) in rutui_theme::render::bidi::logical_cols_to_visual(&plain, start, end)
+                    for (vs, ve) in
+                        rutui_theme::render::bidi::logical_cols_to_visual(&plain, start, end)
                     {
                         let (Ok(vs), Ok(ve)) = (u16::try_from(vs), u16::try_from(ve)) else {
                             continue;
@@ -689,7 +690,9 @@ pub fn render_scrolled_entries_with_selection_boundaries(
                             col_end,
                             target: target.clone(),
                             presentation: if fully_visible {
-                                rutui_theme::render::osc8::file_link_presentation(&painted, target, cwd)
+                                rutui_theme::render::osc8::file_link_presentation(
+                                    &painted, target, cwd,
+                                )
                             } else {
                                 rutui_theme::render::osc8::LinkPresentation::Opaque
                             },

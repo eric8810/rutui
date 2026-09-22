@@ -1,12 +1,14 @@
 use super::*;
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::osc8::{LinkPresentation, resolve_link_target, resolve_link_target_for_context};
 use crate::scrollback::RenderBlock;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::DisplayMode;
 use crate::scrollback::wrappers::EntryRenderer;
 use pretty_assertions::assert_eq;
 use ratatui::style::Color;
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::osc8::{
+    LinkPresentation, resolve_link_target, resolve_link_target_for_context,
+};
 
 fn make_entries(count: usize) -> Vec<ScrollbackEntry> {
     (0..count)
@@ -2717,8 +2719,8 @@ fn truncated_execute_block_detects_urls_in_head_and_tail() {
 /// OSC8 overlay must cover path cols only (not the verb or bullet).
 #[test]
 fn tool_header_link_target_overlay_covers_path_after_bullet() {
-    use rutui_theme::appearance::ToolBullet;
     use crate::scrollback::types::{BlockContext, selectable_cols};
+    use rutui_theme::appearance::ToolBullet;
     use unicode_width::UnicodeWidthStr;
 
     let abs = "/Users/me/project/src/foo.rs";
@@ -2905,7 +2907,9 @@ fn official_vscode_remote_tool_headers_delegate_only_self_resolving_paint() {
                 .link_overlay
                 .links()
                 .iter()
-                .filter(|link| matches!(&link.target, rutui_theme::render::osc8::LinkTarget::File(_)))
+                .filter(|link| {
+                    matches!(&link.target, rutui_theme::render::osc8::LinkTarget::File(_))
+                })
                 .collect();
             let painted_rows = (0..viewport.height)
                 .map(|row| buffer_row_text(&buf, row).trim_end().to_owned())
@@ -2927,7 +2931,9 @@ fn official_vscode_remote_tool_headers_delegate_only_self_resolving_paint() {
             assert!(path_links.iter().all(|link| {
                 assert_eq!(
                     link.target,
-                    rutui_theme::render::osc8::LinkTarget::File(Arc::from(std::path::Path::new(target)))
+                    rutui_theme::render::osc8::LinkTarget::File(Arc::from(std::path::Path::new(
+                        target
+                    )))
                 );
                 let policy = file_link_policy(link, &terminal);
                 policy.osc8_url.is_some() == expected_owned
@@ -3002,7 +3008,9 @@ fn basename_headers_stay_grok_owned_for_duplicate_and_outside_targets() {
             assert!(!painted.contains('/'), "{tool} {name}: {painted}");
             assert_eq!(
                 link.target,
-                rutui_theme::render::osc8::LinkTarget::File(Arc::from(std::path::Path::new(target))),
+                rutui_theme::render::osc8::LinkTarget::File(Arc::from(std::path::Path::new(
+                    target
+                ))),
                 "{tool} {name} semantic target"
             );
             assert_eq!(link.presentation, LinkPresentation::Opaque, "{tool} {name}");

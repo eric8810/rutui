@@ -10,12 +10,12 @@
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::wrapping::word_wrap_lines;
+use crate::context_info::{ContextInfo, count_detail};
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{AccentStyle, BlockContext, BlockLine, BlockOutput};
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::wrapping::word_wrap_lines;
 use rutui_theme::theme::{Theme, quantize};
-use crate::context_info::{ContextInfo, count_detail};
 
 /// Block that renders a `/context` snapshot in scrollback.
 ///

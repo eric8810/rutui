@@ -7,9 +7,9 @@
 
 use ratatui::text::{Line, Span};
 
-use rutui_theme::appearance::AppearanceConfig;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{AccentStyle, BlockContext, BlockOutput, DisplayMode};
+use rutui_theme::appearance::AppearanceConfig;
 use rutui_theme::theme::Theme;
 
 /// Block representing a lifecycle hook event.

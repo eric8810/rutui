@@ -54,7 +54,12 @@ impl<T: Renderable> Renderable for Accented<'_, T> {
 
         // Draw accent line for all rows
         for y in accent_area.y..accent_area.y + accent_area.height {
-            buf.set_string(accent_area.x, y, rutui_theme::glyphs::accent_bar(), self.style);
+            buf.set_string(
+                accent_area.x,
+                y,
+                rutui_theme::glyphs::accent_bar(),
+                self.style,
+            );
         }
 
         // Render inner content

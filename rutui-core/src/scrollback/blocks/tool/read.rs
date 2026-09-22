@@ -6,20 +6,20 @@ use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span, Text};
 
 use super::{LineRange, TOOL_HEADER_RANGE};
-use rutui_theme::prompt_images::ScrollbackImageRef;
-use rutui_theme::render::wrapping::word_wrap_lines_with_joiners;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode, Selectable,
 };
 use crate::syntax::get_syntect;
+use rutui_theme::prompt_images::ScrollbackImageRef;
+use rutui_theme::render::wrapping::word_wrap_lines_with_joiners;
 use rutui_theme::theme::Theme;
 
 const FIRST_LINES: usize = 5;
 const LAST_LINES: usize = 3;
 
-use rutui_theme::appearance::AppearanceConfig;
 use crate::skill_path::skill_name_from_path;
+use rutui_theme::appearance::AppearanceConfig;
 
 /// What kind of non-text media this read produced.
 #[derive(Debug, Clone)]
@@ -631,9 +631,9 @@ mod tests {
             .expect("link target");
         assert_eq!(
             target,
-            &rutui_theme::render::osc8::LinkTarget::File(
-                std::sync::Arc::from(std::path::Path::new(abs),)
-            )
+            &rutui_theme::render::osc8::LinkTarget::File(std::sync::Arc::from(
+                std::path::Path::new(abs),
+            ))
         );
         assert_eq!(
             rutui_theme::render::osc8::resolve_link_target(target)

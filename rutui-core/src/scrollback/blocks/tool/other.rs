@@ -2,12 +2,12 @@
 
 use ratatui::text::{Line, Span};
 
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::wrapping::word_wrap_lines;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode,
 };
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::wrapping::word_wrap_lines;
 use rutui_theme::theme::Theme;
 
 /// Other/unknown tool call.

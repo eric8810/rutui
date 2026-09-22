@@ -36,12 +36,12 @@ pub use padded::Padded;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rutui_theme::render::Renderable;
     use crate::scrollback::block::StubBlock;
     use pretty_assertions::assert_eq;
     use ratatui::buffer::Buffer;
     use ratatui::layout::Rect;
     use ratatui::style::Color;
+    use rutui_theme::render::Renderable;
 
     /// Test that wrappers can be composed together.
     #[test]

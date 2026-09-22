@@ -1388,7 +1388,8 @@ pub fn semantic_selection_at(
     // Single-row case (and, under reordering, the wrap-group case too — see
     // below): the hit column is a visual cell of the painted row and
     // `word_or_url_slice` maps it against that same row.
-    if lo == hi || (rutui_theme::render::bidi::is_enabled() && wrap_group_needs_bidi(lines, lo, hi)) {
+    if lo == hi || (rutui_theme::render::bidi::is_enabled() && wrap_group_needs_bidi(lines, lo, hi))
+    {
         let line = &lines[if lo == hi { lo } else { hit_pos }];
         // The hit column is a visual cell of the painted row, so resolve the
         // word against the painted region (identity/`text` when reordering off).
@@ -3274,7 +3275,8 @@ mod tests {
     #[test]
     fn semantic_selection_from_word_wrap_joiners() {
         let source = ratatui::text::Line::from("hello_world_identifier");
-        let (wrapped, joiners) = rutui_theme::render::wrapping::word_wrap_line_with_joiners(&source, 12);
+        let (wrapped, joiners) =
+            rutui_theme::render::wrapping::word_wrap_line_with_joiners(&source, 12);
         let mut model = ResolvedSelectionModel::default();
         let mut last_width = 0u16;
         for (i, (line, joiner)) in wrapped.iter().zip(joiners).enumerate() {

@@ -13,7 +13,11 @@ pub const FFMPEG_HINT_TEXT: &str = "Install ffmpeg to view inline";
 /// `xai_grok_config::shell::is_command_available` for the ffmpeg hint).
 fn is_command_available(cmd: &str) -> bool {
     let path_var = std::env::var_os("PATH").unwrap_or_default();
-    let exe = if cfg!(windows) { format!("{cmd}.exe") } else { cmd.to_string() };
+    let exe = if cfg!(windows) {
+        format!("{cmd}.exe")
+    } else {
+        cmd.to_string()
+    };
     std::env::split_paths(&path_var)
         .filter(|p| !p.as_os_str().is_empty())
         .any(|dir| {
@@ -115,9 +119,7 @@ thread_local! {
 }
 
 #[cfg(test)]
-pub fn set_ffmpeg_install_cmd_for_test(
-    cmd: Option<&'static str>,
-) -> FfmpegInstallCmdTestGuard {
+pub fn set_ffmpeg_install_cmd_for_test(cmd: Option<&'static str>) -> FfmpegInstallCmdTestGuard {
     TEST_FFMPEG_INSTALL_CMD_OVERRIDE.with(|c| c.set(Some(cmd)));
     FfmpegInstallCmdTestGuard
 }
@@ -169,7 +171,10 @@ mod tests {
     fn reserved_rows_image_is_full_poster_plus_button() {
         let _no_ffmpeg = set_ffmpeg_available_for_test(false);
         let (image_rows, total_rows) = inline_media_reserved_rows(&media(false), 80);
-        assert!((4..=20).contains(&image_rows), "poster budget: {image_rows}");
+        assert!(
+            (4..=20).contains(&image_rows),
+            "poster budget: {image_rows}"
+        );
         assert_eq!(total_rows, image_rows + 3);
     }
 
@@ -191,7 +196,10 @@ mod tests {
     fn reserved_rows_video_is_full_poster_with_ffmpeg() {
         let _ffmpeg = set_ffmpeg_available_for_test(true);
         let (image_rows, total_rows) = inline_media_reserved_rows(&media(true), 80);
-        assert!((4..=20).contains(&image_rows), "poster budget: {image_rows}");
+        assert!(
+            (4..=20).contains(&image_rows),
+            "poster budget: {image_rows}"
+        );
         assert_eq!(total_rows, image_rows + 3);
     }
 }

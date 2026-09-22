@@ -3,11 +3,12 @@ name = "rutui-core"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
+repository = "https://github.com/eric8810/rutui"
 description = "Block-style conversation-history rendering pipeline (scrollback), extracted from xai-grok-pager"
 
 [dependencies]
 # Presentation-primitives layer (W1 extraction) — theme/render/appearance/terminal/util
-rutui-theme = { path = "../rutui-theme" }
+rutui-theme = { path = "../rutui-theme", version = "0.1.0" }
 
 # Streaming markdown renderer. Renamed W-close-out: was `xai-grok-markdown`
 # (generic terminal markdown renderer, zero business deps: pulldown-cmark /
@@ -63,7 +64,7 @@ syntect = { workspace = true }
 # own `input::line_editor` now re-exports it, and `panes.rs` (which must keep
 # compiling) matches the search bar's edit outcome against that same type —
 # so this crate takes `rutui-input` directly (without modifying its source).
-rutui-input = { path = "../rutui-input" }
+rutui-input = { path = "../rutui-input", version = "0.1.0" }
 # `SingleLineViewport` appears in the public `ScrollbackSearchState` API.
 rutui-ratatui-textarea = { workspace = true }
 

@@ -7,10 +7,10 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::Style;
 
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::{Renderable, SafeBuf};
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{BlockBackground, BlockContext, DisplayMode};
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::{Renderable, SafeBuf};
 use rutui_theme::theme::Theme;
 
 /// Renders a `BlockContent` implementation as a `Renderable`.

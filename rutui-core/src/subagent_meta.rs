@@ -82,6 +82,9 @@ mod tests {
 
     #[test]
     fn missing_optional_parts_omitted() {
-        assert_eq!(format_subagent_meta(Some("researcher"), None, Some("grok-3")), " (researcher \u{00b7} grok-3)");
+        assert_eq!(
+            format_subagent_meta(Some("researcher"), None, Some("grok-3")),
+            " (researcher \u{00b7} grok-3)"
+        );
     }
 }

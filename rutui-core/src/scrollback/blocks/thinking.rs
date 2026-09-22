@@ -4,11 +4,11 @@ use ratatui::style::{Color, Modifier, Style, Stylize};
 use ratatui::text::{Line, Span, Text};
 use unicode_width::UnicodeWidthStr;
 
-use rutui_theme::render::color::blend_line_with_default;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode,
 };
+use rutui_theme::render::color::blend_line_with_default;
 use rutui_theme::theme::Theme;
 
 use super::markdown_content::MarkdownContent;
@@ -542,8 +542,8 @@ impl BlockContent for ThinkingBlock {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rutui_theme::appearance::AppearanceConfig;
     use crate::scrollback::types::Selectable;
+    use rutui_theme::appearance::AppearanceConfig;
 
     fn ctx(mode: DisplayMode, width: u16) -> BlockContext {
         BlockContext {

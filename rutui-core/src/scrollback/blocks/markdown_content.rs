@@ -10,16 +10,16 @@ use std::cell::RefCell;
 
 use ratatui::text::Line;
 
-use rutui_theme::render::wrapping::word_wrap_lines_with_joiners;
 use crate::scrollback::types::{BlockLine, BlockOutput};
+use rutui_theme::render::wrapping::word_wrap_lines_with_joiners;
 
 use super::quote_bar::QuoteBarStrip;
 
 pub const MARKDOWN_BODY_RANGE: u16 = 0;
-use crate::syntax::get_syntect;
-use rutui_theme::theme::{ThemeKind, cache as theme_cache};
 use crate::md_style;
+use crate::syntax::get_syntect;
 use rutui_markdown::StreamingMarkdownRenderer;
+use rutui_theme::theme::{ThemeKind, cache as theme_cache};
 
 /// Mutable rendering state behind a single `RefCell`.
 ///
@@ -221,10 +221,7 @@ impl MarkdownContent {
     }
 
     /// Access the pre-wrap hyperlink targets via a closure, avoiding allocation.
-    pub fn with_hyperlinks<R>(
-        &self,
-        f: impl FnOnce(&[rutui_markdown::HyperlinkTarget]) -> R,
-    ) -> R {
+    pub fn with_hyperlinks<R>(&self, f: impl FnOnce(&[rutui_markdown::HyperlinkTarget]) -> R) -> R {
         let state = self.state.borrow();
         f(state.renderer.view().hyperlinks)
     }

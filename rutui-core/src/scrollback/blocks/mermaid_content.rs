@@ -14,11 +14,11 @@
 use std::ops::Range;
 
 use ratatui::text::Line;
-use unicode_width::UnicodeWidthStr;
 use rutui_markdown::MarkdownRenderView;
+use unicode_width::UnicodeWidthStr;
 
-use rutui_theme::appearance::RenderMermaid;
 use crate::scrollback::types::{BlockLine, BlockOutput};
+use rutui_theme::appearance::RenderMermaid;
 use rutui_theme::theme::ThemeKind;
 
 /// Fence info string identifying a Mermaid diagram.
@@ -470,9 +470,9 @@ pub fn apply_affordance_rows(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::md_style;
     use crate::scrollback::types::Selectable;
     use crate::syntax::get_syntect;
-    use crate::md_style;
     use rutui_markdown::StreamingMarkdownRenderer;
 
     /// Render markdown to a view and collect the detected mermaid blocks.

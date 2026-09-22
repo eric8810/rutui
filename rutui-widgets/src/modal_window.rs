@@ -851,7 +851,9 @@ pub fn fit_tip_line<'a>(candidates: &[&'a str], width: usize) -> std::borrow::Co
         }
     }
     match candidates.last().copied().filter(|s| !s.is_empty()) {
-        Some(last) => std::borrow::Cow::Owned(rutui_theme::render::line_utils::truncate_str(last, width)),
+        Some(last) => {
+            std::borrow::Cow::Owned(rutui_theme::render::line_utils::truncate_str(last, width))
+        }
         None => std::borrow::Cow::Borrowed(""),
     }
 }

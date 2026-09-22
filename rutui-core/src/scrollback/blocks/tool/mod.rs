@@ -36,11 +36,11 @@ pub use use_tool::UseToolCallBlock;
 pub use web_fetch::WebFetchToolCallBlock;
 pub use web_search::WebSearchToolCallBlock;
 
-use rutui_theme::appearance::AppearanceConfig;
 use crate::scrollback::block::{BlockContent, join_searchable};
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockOutput, DisplayMode,
 };
+use rutui_theme::appearance::AppearanceConfig;
 use std::fmt;
 
 /// Shared selection-range id for tool-call header lines.

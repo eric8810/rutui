@@ -3,11 +3,12 @@ name = "rutui-input"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
+repository = "https://github.com/eric8810/rutui"
 description = "Terminal input handling: key shortcuts, modifier normalization, mouse scroll state machine, and a generic ActionRegistry keybinding registry."
 
 [dependencies]
 # Presentation-primitives layer (terminal detection / capability classification).
-rutui-theme = { path = "../rutui-theme" }
+rutui-theme = { path = "../rutui-theme", version = "0.1.0" }
 
 # Prompt text input (line editor L0)
 rutui-ratatui-textarea = { workspace = true }

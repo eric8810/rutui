@@ -4,13 +4,13 @@ use ratatui::style::Modifier;
 use ratatui::text::{Line, Span, Text};
 
 use super::TOOL_HEADER_RANGE;
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::appearance::ExecuteHeaderStyle;
-use rutui_theme::render::wrapping::word_wrap_lines_with_joiners;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode, Selectable,
 };
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::appearance::ExecuteHeaderStyle;
+use rutui_theme::render::wrapping::word_wrap_lines_with_joiners;
 use rutui_theme::theme::Theme;
 
 const EXECUTE_STDOUT_RANGE_BASE: u16 = 1;
@@ -558,10 +558,13 @@ impl ExecuteToolCallBlock {
             // washed out on many dark profiles; content must track the terminal's
             // default fg (`primary` / Reset). Labels / chrome stay on `muted`/`dim`.
             let styled_lines: Vec<Line<'static>> =
-                rutui_theme::render::terminal_output::render_terminal_lines(output, theme.primary())
-                    .into_iter()
-                    .map(|rl| rl.line)
-                    .collect();
+                rutui_theme::render::terminal_output::render_terminal_lines(
+                    output,
+                    theme.primary(),
+                )
+                .into_iter()
+                .map(|rl| rl.line)
+                .collect();
 
             let (wrapped, joiners) =
                 word_wrap_lines_with_joiners(styled_lines, width.saturating_sub(2).max(20));

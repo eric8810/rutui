@@ -811,10 +811,16 @@ mod tests {
             let mut rest = src;
             while let Some(open) = rest.find('[') {
                 let after_open = &rest[open + 1..];
-                let Some(close) = after_open.find(']') else { break };
-                let Some(url_offset) = after_open[close + 1..].find('(') else { break };
+                let Some(close) = after_open.find(']') else {
+                    break;
+                };
+                let Some(url_offset) = after_open[close + 1..].find('(') else {
+                    break;
+                };
                 let after_paren = &after_open[close + 1 + url_offset + 1..];
-                let Some(url_end) = after_paren.find(')') else { break };
+                let Some(url_end) = after_paren.find(')') else {
+                    break;
+                };
                 if open > 0 {
                     spans.push(Span::styled(rest[..open].to_string(), Style::default()));
                 }
@@ -830,10 +836,7 @@ mod tests {
             }
             spans
         }
-        let lines = md
-            .split('\n')
-            .map(|l| Line::from(spans_of(l)))
-            .collect();
+        let lines = md.split('\n').map(|l| Line::from(spans_of(l))).collect();
         MarkdownRenderOutput { lines }
     }
 
@@ -848,8 +851,8 @@ mod tests {
         // Use the real theme's markdown style to produce spans.
         let md_style = crate::theme::md_style::style();
         let md = "uses [Buildkite](https://buildkite.com/) here\n";
-        let out = crate::theme::md_style::render(md, md_style, true)
-            .expect("test renderer installed");
+        let out =
+            crate::theme::md_style::render(md, md_style, true).expect("test renderer installed");
         assert!(!out.lines.is_empty());
 
         // Wrap at narrow width.
@@ -896,8 +899,8 @@ mod tests {
             [Kubernetes](https://kubernetes.io/) clusters. Source code is hosted on \
             [GitHub](https://github.com/) and CI/CD runs via \
             [Buildkite](https://buildkite.com/).\n";
-        let out = crate::theme::md_style::render(md, md_style, true)
-            .expect("test renderer installed");
+        let out =
+            crate::theme::md_style::render(md, md_style, true).expect("test renderer installed");
         let labels = [
             "Bazel",
             "uv",

@@ -33,7 +33,7 @@ use syntect::easy::HighlightLines;
 use syntect::highlighting::Style as SyntectStyle;
 
 use super::TOOL_HEADER_RANGE;
-use rutui_theme::appearance::AppearanceConfig;
+use crate::diff::{DiffHunk, diff_hunks_to_patch};
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode,
@@ -41,8 +41,8 @@ use crate::scrollback::types::{
     SelectionBoundaryEntry,
 };
 use crate::syntax::{Syntect, get_syntect};
+use rutui_theme::appearance::AppearanceConfig;
 use rutui_theme::theme::{Theme, ThemeKind};
-use crate::diff::{DiffHunk, diff_hunks_to_patch};
 
 /// Skip full-file HL when the post-edit file exceeds this size (2 MiB).
 ///
@@ -1038,7 +1038,10 @@ impl EditToolCallBlock {
         Line::from(spans)
     }
 
-    fn path_link_target(&self, cwd: Option<&Path>) -> Option<rutui_theme::render::osc8::LinkTarget> {
+    fn path_link_target(
+        &self,
+        cwd: Option<&Path>,
+    ) -> Option<rutui_theme::render::osc8::LinkTarget> {
         rutui_theme::render::osc8::tool_path_file_target(&self.path, cwd)
     }
 
@@ -1057,14 +1060,16 @@ impl EditToolCallBlock {
             EditHighlightPhase::FileScoped {
                 by_new_line,
                 theme: baked,
-            } if *baked == rutui_theme::theme::cache::current_kind() => render_diff_hunks_with_styles(
-                &self.hunks,
-                path,
-                by_new_line.as_ref(),
-                theme,
-                width,
-                config,
-            ),
+            } if *baked == rutui_theme::theme::cache::current_kind() => {
+                render_diff_hunks_with_styles(
+                    &self.hunks,
+                    path,
+                    by_new_line.as_ref(),
+                    theme,
+                    width,
+                    config,
+                )
+            }
             _ => render_diff_hunks_highlighted(&self.hunks, path, theme, width, config),
         }
     }
@@ -1122,26 +1127,27 @@ fn wrap_edit_header(
         .spans
         .get(1)
         .map_or_else(String::new, |span| span.content.to_string());
-    let (wrapped, joiners, path_range, prefix_span) = if !header.spans.is_empty()
-        && prefix_width > 0
-    {
-        let prefix_span = header.spans[0].clone();
-        let content_line = Line::from(header.spans[1..].to_vec());
-        let (wrapped, joiners) = rutui_theme::render::wrapping::word_wrap_lines_with_joiners(
-            std::iter::once(content_line),
-            wrap_width,
-        );
-        (wrapped, joiners, 0..path_bytes, Some(prefix_span))
-    } else {
-        let (wrapped, joiners) =
-            rutui_theme::render::wrapping::word_wrap_lines_with_joiners(std::iter::once(header), width);
-        (
-            wrapped,
-            joiners,
-            prefix_bytes..prefix_bytes.saturating_add(path_bytes),
-            None,
-        )
-    };
+    let (wrapped, joiners, path_range, prefix_span) =
+        if !header.spans.is_empty() && prefix_width > 0 {
+            let prefix_span = header.spans[0].clone();
+            let content_line = Line::from(header.spans[1..].to_vec());
+            let (wrapped, joiners) = rutui_theme::render::wrapping::word_wrap_lines_with_joiners(
+                std::iter::once(content_line),
+                wrap_width,
+            );
+            (wrapped, joiners, 0..path_bytes, Some(prefix_span))
+        } else {
+            let (wrapped, joiners) = rutui_theme::render::wrapping::word_wrap_lines_with_joiners(
+                std::iter::once(header),
+                width,
+            );
+            (
+                wrapped,
+                joiners,
+                prefix_bytes..prefix_bytes.saturating_add(path_bytes),
+                None,
+            )
+        };
 
     let indent = " ".repeat(total_indent);
     let mut source_offset = 0usize;
@@ -1247,8 +1253,8 @@ impl EditToolCallBlock {
         let muted_collapsed = ctx.mute_when_collapsed(tool_cfg.muted_collapsed);
         let dim_details = tool_cfg.dim_details;
         // Explicit pager.toml value wins; unset follows the shell-owned flag.
-        let show_summary =
-            edit_cfg.effective_line_summary(rutui_theme::appearance::cache::load_collapsed_edit_blocks());
+        let show_summary = edit_cfg
+            .effective_line_summary(rutui_theme::appearance::cache::load_collapsed_edit_blocks());
 
         let cwd = ctx.cwd.as_deref();
         let link_target = self.path_link_target(cwd);
@@ -1494,9 +1500,9 @@ mod tests {
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use rutui_theme::appearance::AppearanceConfig;
-    use crate::scrollback::types::DisplayMode;
     use crate::diff::DiffLine;
+    use crate::scrollback::types::DisplayMode;
+    use rutui_theme::appearance::AppearanceConfig;
 
     fn test_ctx() -> BlockContext {
         BlockContext {

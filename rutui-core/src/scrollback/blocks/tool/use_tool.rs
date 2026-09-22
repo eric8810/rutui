@@ -1,15 +1,15 @@
 //! UseToolCallBlock — MCP integration tool dispatch.
 
+use crate::mcp_names::{MCP_TOOL_NAME_DELIMITER, mcp_titleize_segment};
 use ratatui::style::Modifier;
 use ratatui::text::{Line, Span, Text};
-use crate::mcp_names::{MCP_TOOL_NAME_DELIMITER, mcp_titleize_segment};
 
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::line_utils::truncate_str;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode,
 };
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::line_utils::truncate_str;
 use rutui_theme::theme::Theme;
 
 const MAX_INLINE_LINES: usize = 10;

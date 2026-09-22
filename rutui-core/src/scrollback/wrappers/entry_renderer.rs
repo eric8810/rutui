@@ -8,14 +8,14 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::style::Style;
 
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::color::blend_color;
-use rutui_theme::render::{Renderable, SafeBuf};
 use crate::scrollback::BlockOutput;
 use crate::scrollback::block::{BlockContent, RenderBlock};
 use crate::scrollback::entry::ScrollbackEntry;
 use crate::scrollback::layout::HorizontalLayout;
 use crate::scrollback::types::{AccentStyle, BlockBackground, DisplayMode, Selectable};
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::color::blend_color;
+use rutui_theme::render::{Renderable, SafeBuf};
 use rutui_theme::theme::{self, Theme};
 
 /// Animation speed for running blocks (radians per tick).
@@ -320,7 +320,9 @@ impl<'a> EntryRenderer<'a> {
                     .saturating_sub(UnicodeWidthStr::width(prefix.as_str()))
                     .saturating_sub(suffix_width);
                 let label = ratatui::text::Line::from(vg.line.spans[..hook_start].to_vec());
-                spans.extend(rutui_theme::render::line_utils::truncate_line(label, label_budget).spans);
+                spans.extend(
+                    rutui_theme::render::line_utils::truncate_line(label, label_budget).spans,
+                );
                 spans.extend(vg.line.spans[hook_start..].iter().cloned());
             } else {
                 spans.extend(vg.line.spans.iter().cloned());
@@ -1051,9 +1053,9 @@ impl Renderable for EntryRenderer<'_> {
 mod tests {
     use super::*;
     use crate::scrollback::RenderBlock;
-    use rutui_theme::theme::cache::pin_theme;
     use pretty_assertions::assert_eq;
     use ratatui::style::Color;
+    use rutui_theme::theme::cache::pin_theme;
 
     #[test]
     fn test_entry_renderer_height() {
@@ -1828,13 +1830,17 @@ mod tests {
         // Baselines with the setting OFF (no treatment row). Both the exact and
         // the source-based estimate are captured in this window because
         // `estimate_extra_rows`/`output()` read the *current* global setting.
-        rutui_theme::appearance::cache::set_render_mermaid(rutui_theme::appearance::RenderMermaid::Off);
+        rutui_theme::appearance::cache::set_render_mermaid(
+            rutui_theme::appearance::RenderMermaid::Off,
+        );
         let off_entry = ScrollbackEntry::new(RenderBlock::agent_message(md));
         let h_off = EntryRenderer::new(&off_entry, &theme).desired_height(80);
         let est_off = EntryRenderer::new(&off_entry, &theme).estimate_height(80);
 
         // Engine on → exactly one extra (affordance) row over the plain block.
-        rutui_theme::appearance::cache::set_render_mermaid(rutui_theme::appearance::RenderMermaid::On);
+        rutui_theme::appearance::cache::set_render_mermaid(
+            rutui_theme::appearance::RenderMermaid::On,
+        );
         let on_entry = ScrollbackEntry::new(RenderBlock::agent_message(md));
         let r = EntryRenderer::new(&on_entry, &theme);
         let h_on = r.desired_height(80);

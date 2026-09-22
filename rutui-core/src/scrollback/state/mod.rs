@@ -734,11 +734,9 @@ impl ScrollbackState {
             && entry.display_mode == DisplayMode::Collapsed
         {
             entry.display_mode = edit_default_display_mode(
-                self.appearance
-                    .scrollback
-                    .blocks
-                    .edit
-                    .effective_expanded(rutui_theme::appearance::cache::load_collapsed_edit_blocks()),
+                self.appearance.scrollback.blocks.edit.effective_expanded(
+                    rutui_theme::appearance::cache::load_collapsed_edit_blocks(),
+                ),
                 edit,
             );
         }

@@ -8,9 +8,9 @@
 use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span};
 
-use rutui_theme::appearance::AppearanceConfig;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{AccentStyle, BlockContext, BlockLine, BlockOutput, DisplayMode};
+use rutui_theme::appearance::AppearanceConfig;
 use rutui_theme::theme::Theme;
 
 /// Which continue-path the max-tier credit-limit card recommends.

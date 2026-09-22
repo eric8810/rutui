@@ -7,12 +7,12 @@ use ratatui::style::Modifier;
 use ratatui::text::{Line, Span};
 
 use super::TOOL_HEADER_RANGE;
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::line_utils::truncate_str;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockLine, BlockOutput, DisplayMode, Selectable,
 };
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::line_utils::truncate_str;
 use rutui_theme::theme::Theme;
 
 /// `$GROK_HOME` verbatim when set, else `<os home>/.grok`. W4 decoupling:

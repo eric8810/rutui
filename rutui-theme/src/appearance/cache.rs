@@ -475,10 +475,7 @@ pub fn set_keep_text_selection(value: TextSelection) {
 /// adopt it as the default. Any explicit local choice always wins, so this only sets the
 /// untouched default. An absent or unrecognized value leaves the compile-time default in
 /// place. Call once at startup after [`prime`].
-pub fn apply_remote_keep_text_selection_default(
-    remote_default: Option<&str>,
-    ui: &UiSettings,
-) {
+pub fn apply_remote_keep_text_selection_default(remote_default: Option<&str>, ui: &UiSettings) {
     let Some(value) = remote_default.and_then(TextSelection::from_canonical) else {
         return;
     };

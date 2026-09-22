@@ -22,10 +22,10 @@ use crate::scroll_log::{
     ScrollLogConfigEcho, ScrollLogEvent, ScrollLogEvt, ScrollLogRecorder, ScrollLogTrigger,
 };
 use crossterm::event::{MouseEvent, MouseEventKind};
+use rutui_theme::terminal::{MultiplexerKind, TerminalName};
 use std::collections::VecDeque;
 use std::time::Duration;
 use std::time::Instant;
-use rutui_theme::terminal::{MultiplexerKind, TerminalName};
 
 /// Scroll input mode for wheel/trackpad detection.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]

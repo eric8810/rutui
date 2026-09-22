@@ -9,10 +9,10 @@ use std::time::Duration;
 use ratatui::style::Modifier;
 use ratatui::text::{Line, Span, Text};
 
-use rutui_theme::appearance::AppearanceConfig;
-use rutui_theme::render::color::blend_color;
 use crate::scrollback::block::BlockContent;
 use crate::scrollback::types::{AccentStyle, BlockContext, BlockOutput, DisplayMode};
+use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::render::color::blend_color;
 use rutui_theme::theme::Theme;
 use rutui_theme::util::format_duration;
 
@@ -321,8 +321,7 @@ fn push_shell_command_preamble_lines(
         command
     };
 
-    let cmd_rows =
-        crate::bash_highlight::render_bash_command_display_lines(command, cmd_width);
+    let cmd_rows = crate::bash_highlight::render_bash_command_display_lines(command, cmd_width);
 
     let hang_indent: String = " ".repeat(hang);
     if cmd_rows.is_empty() {

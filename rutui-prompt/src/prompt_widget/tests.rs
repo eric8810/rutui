@@ -250,7 +250,8 @@ fn ghost_text_progressive_matching_trims_before_accept() {
     let mut w = widget();
     w.set_text("grep");
     w.suggestions.set_last_request_text("grep");
-    w.suggestions.set_ghost(" patterns".to_string(), SuggestionSource::None);
+    w.suggestions
+        .set_ghost(" patterns".to_string(), SuggestionSource::None);
     assert!(w.try_progressive_match("grep "));
     assert_eq!(w.suggestions.ghost_text(), Some("patterns"));
 }
@@ -299,9 +300,7 @@ fn completion_dropdown_accept_and_splice() {
 fn history_search_is_owned_by_the_widget() {
     let mut w = widget();
     let activated = w.history_search.activate(
-        &[crate::history_search::HistoryEntry {
-            text: "abc".into(),
-        }],
+        &[crate::history_search::HistoryEntry { text: "abc".into() }],
         "",
     );
     assert!(activated);
@@ -340,7 +339,10 @@ fn ctrl_c_clears_non_empty_text() {
 #[test]
 fn esc_and_tab_are_ignored() {
     let mut w = widget();
-    let esc = w.handle_key(&KeyEvent::new(KeyCode::Esc, crossterm::event::KeyModifiers::NONE));
+    let esc = w.handle_key(&KeyEvent::new(
+        KeyCode::Esc,
+        crossterm::event::KeyModifiers::NONE,
+    ));
     assert_eq!(esc, PromptEvent::Ignored);
 }
 

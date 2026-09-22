@@ -1864,7 +1864,8 @@ mod tests {
     #[cfg(unix)]
     #[test]
     fn null_fd_outlives_its_path() {
-        let path = std::env::temp_dir().join(format!("rutui-tty-utils-null-{}", std::process::id()));
+        let path =
+            std::env::temp_dir().join(format!("rutui-tty-utils-null-{}", std::process::id()));
         std::fs::write(&path, b"").expect("create stand-in null");
         let fd = open_null_fd(&path).expect("open stand-in null");
         std::fs::remove_file(&path).expect("unlink stand-in null");

@@ -17,12 +17,12 @@ use ratatui::style::Modifier;
 use ratatui::text::{Line, Span};
 use unicode_width::UnicodeWidthStr;
 
+use crate::scrollback::block::BlockContent;
+use crate::scrollback::types::{AccentStyle, BlockContext, BlockOutput, DisplayMode};
 use crate::subagent_meta::format_subagent_meta;
 use rutui_theme::appearance::AppearanceConfig;
 use rutui_theme::render::color::blend_color;
 use rutui_theme::render::line_utils::truncate_str;
-use crate::scrollback::block::BlockContent;
-use crate::scrollback::types::{AccentStyle, BlockContext, BlockOutput, DisplayMode};
 use rutui_theme::theme::Theme;
 use rutui_theme::util::format_duration;
 

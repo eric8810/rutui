@@ -3,6 +3,7 @@ name = "rutui-theme"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
+repository = "https://github.com/eric8810/rutui"
 description = "Terminal theming and capability detection for rich TUIs (themes, truecolor quantization, kitty/sixel images, OSC 8 hyperlinks, tmux, appearance config)."
 
 [dependencies]

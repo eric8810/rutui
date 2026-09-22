@@ -291,7 +291,9 @@ pub fn render_tick_hover_popup(
     let mut rest: &str = preview.trim();
     while !rest.is_empty() && lines.len() < 2 {
         if lines.len() == 1 {
-            lines.push(rutui_theme::render::line_utils::truncate_str(rest, max_text));
+            lines.push(rutui_theme::render::line_utils::truncate_str(
+                rest, max_text,
+            ));
             rest = "";
         } else {
             let end = rutui_theme::render::line_utils::byte_offset_at_width(rest, max_text);

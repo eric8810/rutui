@@ -462,12 +462,7 @@ impl SelectionBoundary {
         Self { prefix, suffix }
     }
 
-    pub fn apply(
-        &self,
-        selected: String,
-        include_prefix: bool,
-        include_suffix: bool,
-    ) -> String {
+    pub fn apply(&self, selected: String, include_prefix: bool, include_suffix: bool) -> String {
         let mut output = String::with_capacity(
             selected.len()
                 + usize::from(include_prefix) * self.prefix.len()

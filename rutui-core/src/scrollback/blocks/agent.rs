@@ -233,8 +233,8 @@ impl BlockContent for AgentMessageBlock {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rutui_theme::appearance::{AppearanceConfig, RenderMermaid};
     use crate::scrollback::types::Selectable;
+    use rutui_theme::appearance::{AppearanceConfig, RenderMermaid};
 
     fn ctx(width: u16, raw: bool) -> BlockContext {
         BlockContext {

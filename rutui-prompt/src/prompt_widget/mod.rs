@@ -1965,19 +1965,21 @@ impl PromptWidget {
         // Render prefix on first text row: search icon when history search is active, else ❯.
         let prefix_w = if style.show_prefix { PREFIX_WIDTH } else { 0 };
         if style.show_prefix && text_area_rect.width > PREFIX_WIDTH {
-            let (prefix_str, accent_color) = if self.history_search.is_active()
-                && !self.history_search.is_browse()
-            {
-                // Search-mode indicator — highest prefix priority. Browse
-                // mode keeps the normal prefix: the composer holds the
-                // populated entry (a real draft), not a filter query.
-                ("? ", theme.accent_user)
-            } else if let Some((p, c)) = style.prefix_override {
-                // Caller override (e.g., bash mode `! ` in yellow).
-                (p, c)
-            } else {
-                (rutui_theme::glyphs::prompt_arrow(), style.accent_color(&theme))
-            };
+            let (prefix_str, accent_color) =
+                if self.history_search.is_active() && !self.history_search.is_browse() {
+                    // Search-mode indicator — highest prefix priority. Browse
+                    // mode keeps the normal prefix: the composer holds the
+                    // populated entry (a real draft), not a filter query.
+                    ("? ", theme.accent_user)
+                } else if let Some((p, c)) = style.prefix_override {
+                    // Caller override (e.g., bash mode `! ` in yellow).
+                    (p, c)
+                } else {
+                    (
+                        rutui_theme::glyphs::prompt_arrow(),
+                        style.accent_color(&theme),
+                    )
+                };
             buf.set_string(
                 text_area_rect.x,
                 text_area_rect.y,
@@ -2019,8 +2021,8 @@ impl PromptWidget {
             && ta_area.width > 0
             && ta_area.height > 0
         {
-            let interim_fg = render::color::blend_color(bg, theme.text_secondary, 0.7)
-                .unwrap_or(theme.gray);
+            let interim_fg =
+                render::color::blend_color(bg, theme.text_secondary, 0.7).unwrap_or(theme.gray);
             let interim_style = Style::default()
                 .fg(interim_fg)
                 .bg(bg)
@@ -2059,8 +2061,7 @@ impl PromptWidget {
         {
             let placeholder = style.placeholder_override.unwrap_or("Build anything");
             // `set_string` clips at the buffer edge, not at the textarea, so a placeholder longer than the box would paint over its border.
-            let truncated =
-                render::line_utils::truncate_str(placeholder, ta_area.width as usize);
+            let truncated = render::line_utils::truncate_str(placeholder, ta_area.width as usize);
             buf.set_string(
                 ta_area.x,
                 ta_area.y,
@@ -2200,8 +2201,8 @@ impl PromptWidget {
     /// unfocused, so both borders read as one chrome.
     fn chrome_caption_style(bg: ratatui::style::Color, theme: &Theme, focused: bool) -> Style {
         let opacity = if focused { 0.6 } else { 0.4 };
-        let fg = render::color::blend_color(bg, theme.text_secondary, opacity)
-            .unwrap_or(theme.gray);
+        let fg =
+            render::color::blend_color(bg, theme.text_secondary, opacity).unwrap_or(theme.gray);
         Style::default().fg(fg).bg(bg)
     }
 
@@ -2263,8 +2264,8 @@ impl PromptWidget {
                     // Bold flags use full color for visibility.
                     Style::default().fg(color).bg(bg)
                 } else {
-                    let dimmed = render::color::blend_color(bg, color, flag_opacity)
-                        .unwrap_or(theme.gray);
+                    let dimmed =
+                        render::color::blend_color(bg, color, flag_opacity).unwrap_or(theme.gray);
                     Style::default().fg(dimmed).bg(bg)
                 }
             } else if flag.bold {

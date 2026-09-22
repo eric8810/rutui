@@ -1,9 +1,9 @@
 use super::super::test_util::*;
 use super::*;
 use crate::scrollback::entry::EntryId;
-use rutui_theme::theme::cache::pin_theme;
 use pretty_assertions::assert_eq;
 use ratatui::style::Color;
+use rutui_theme::theme::cache::pin_theme;
 
 /// After the first `prepare_layout`, subsequent `push_block` calls should
 /// EXTEND the layout cache instead of nuking it. This prevents the O(N)

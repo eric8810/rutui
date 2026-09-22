@@ -209,7 +209,12 @@ where
     /// context (the pager's `ScrollbackFocused`) are suppressed. This returns
     /// the first non-letter alt key instead (e.g. arrow keys), so hints show
     /// a key that actually works.
-    pub fn key_for_mode(&self, id: A, vim_mode: bool, letter_gated_context: C) -> Option<KeyShortcut> {
+    pub fn key_for_mode(
+        &self,
+        id: A,
+        vim_mode: bool,
+        letter_gated_context: C,
+    ) -> Option<KeyShortcut> {
         let def = self.find(id)?;
         if !vim_mode
             && def.context == letter_gated_context

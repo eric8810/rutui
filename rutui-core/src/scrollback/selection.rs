@@ -7,8 +7,8 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::Style;
 
-use rutui_theme::render::osc8::LinkOverlay;
 use crate::scrollback::text_selection::ResolvedSelectionModel;
+use rutui_theme::render::osc8::LinkOverlay;
 use rutui_theme::theme::Theme;
 
 /// Box drawing characters for selection border.
@@ -247,7 +247,8 @@ impl SelectionBox {
                     use rutui_theme::render::SafeBuf;
                     buf.set_string_safe(close_rect.x, close_rect.y, label, style);
                 } else if let Some(cell) = buf.cell_mut((close_rect.x, close_rect.y)) {
-                    cell.set_symbol(rutui_theme::glyphs::ballot_x()).set_style(style);
+                    cell.set_symbol(rutui_theme::glyphs::ballot_x())
+                        .set_style(style);
                 }
             } else if let Some(cell) = buf.cell_mut((right_x, corner_y)) {
                 cell.set_char(border_chars::TOP_RIGHT).set_style(self.style);

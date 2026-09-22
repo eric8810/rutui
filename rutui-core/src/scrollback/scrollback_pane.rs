@@ -6,8 +6,6 @@ use ratatui::style::Style;
 use ratatui::widgets::StatefulWidget;
 use std::ops::Range;
 
-use rutui_theme::render::SafeBuf;
-use rutui_theme::render::color::{blend_color, fade_region};
 use crate::scrollback::EntryLayoutInfo;
 use crate::scrollback::block::{BlockContent, RenderBlock};
 use crate::scrollback::entry::ScrollbackEntry;
@@ -21,6 +19,8 @@ use crate::scrollback::text_selection::{
     VisibleBlockGeometry,
 };
 use crate::scrollback::types::{BlockContext, DisplayMode, derive_selection_text, selectable_cols};
+use rutui_theme::render::SafeBuf;
+use rutui_theme::render::color::{blend_color, fade_region};
 use rutui_theme::theme::Theme;
 
 /// Scrollback pane widget.
@@ -1363,7 +1363,10 @@ fn paint_expandable_indicator(
         // contrast with the right-pointing state, and `chevron_down` matches
         // `›`'s weight with its own ConHost fallback.
         let ch = if point_down {
-            rutui_theme::glyphs::chevron_down().chars().next().unwrap_or('v')
+            rutui_theme::glyphs::chevron_down()
+                .chars()
+                .next()
+                .unwrap_or('v')
         } else {
             display_cfg
                 .expandable_indicator_char
@@ -1379,12 +1382,12 @@ fn paint_expandable_indicator(
 mod tests {
     use super::verb_member_indicator_row;
     use super::*;
-    use rutui_theme::appearance::AppearanceConfig;
     use crate::scrollback::block::RenderBlock;
     use crate::scrollback::render::ScratchBuffer;
     use crate::scrollback::state::ScrollbackState;
     use ratatui::buffer::Buffer;
     use ratatui::layout::Rect;
+    use rutui_theme::appearance::AppearanceConfig;
 
     fn render_model(state: &mut ScrollbackState, area: Rect) -> ResolvedSelectionModel {
         state.prepare_layout(area.width, area.height);

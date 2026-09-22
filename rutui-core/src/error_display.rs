@@ -86,7 +86,10 @@ mod tests {
             WireErrorType::parse(Some("encrypted_content_mismatch")),
             WireErrorType::EncryptedContentMismatch
         );
-        assert_eq!(WireErrorType::parse(Some("disk_full")), WireErrorType::DiskFull);
+        assert_eq!(
+            WireErrorType::parse(Some("disk_full")),
+            WireErrorType::DiskFull
+        );
         assert_eq!(
             WireErrorType::parse(Some("rate_limited")),
             WireErrorType::RateLimited
@@ -97,7 +100,10 @@ mod tests {
 
     #[test]
     fn banner_joins_with_dash_or_keeps_headline() {
-        assert_eq!(banner_message("Server error (500)", ""), "Server error (500)");
+        assert_eq!(
+            banner_message("Server error (500)", ""),
+            "Server error (500)"
+        );
         assert_eq!(
             banner_message("Server error (500)", "boom"),
             "Server error (500) \u{2014} boom"
