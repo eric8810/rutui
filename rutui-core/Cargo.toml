@@ -33,8 +33,8 @@ regex = { workspace = true }
 # Channel/scaffolding used by scrollback state
 indexmap = { workspace = true }
 
-# enum_delegate for the RenderBlock dispatch over BlockContent
-enum_delegate = { workspace = true }
+# Enum dispatch for RenderBlock and ToolCallBlock over BlockContent
+whichever = { workspace = true }
 
 # ScratchBuffer Deref/DerefMut over ratatui Buffer
 derive_more = { workspace = true }

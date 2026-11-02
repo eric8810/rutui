@@ -36,11 +36,14 @@ pub use use_tool::UseToolCallBlock;
 pub use web_fetch::WebFetchToolCallBlock;
 pub use web_search::WebSearchToolCallBlock;
 
-use crate::scrollback::block::{BlockContent, join_searchable};
+use crate::scrollback::block::{AnchoredMedia, BlockContent, join_searchable};
+use crate::scrollback::blocks::mermaid_content::DiagramAffordance;
 use crate::scrollback::types::{
     AccentStyle, BlockBackground, BlockContext, BlockOutput, DisplayMode,
 };
+use ratatui::text::Text;
 use rutui_theme::appearance::AppearanceConfig;
+use rutui_theme::prompt_images::{InlineMediaInfo, ScrollbackImageRef, ScrollbackVideoRef};
 use std::fmt;
 
 /// Shared selection-range id for tool-call header lines.
@@ -153,9 +156,10 @@ impl VerbGroupKind {
 
 /// Tool call block - a sum type for different tool types.
 ///
-/// BlockContent is manually implemented (not via enum_delegate) so we can
-/// intercept `output()` to prepend the tool bullet configured in appearance.
+/// BlockContent is forwarded to the inner block, except `has_bullet()` and
+/// `is_groupable()`, which the enum answers for every tool call.
 #[derive(Debug, Clone)]
+#[whichever::dispatch]
 pub enum ToolCallBlock {
     /// Execute a shell command.
     Execute(ExecuteToolCallBlock),
@@ -178,6 +182,7 @@ pub enum ToolCallBlock {
     /// Memory search with structured result display.
     MemorySearch(MemorySearchToolCallBlock),
     /// Skill invocation (user skills / slash commands via the Skill tool).
+    #[dispatch(from = false)]
     Skill(OtherToolCallBlock),
     /// Other/unknown tool types.
     Other(OtherToolCallBlock),
@@ -186,81 +191,8 @@ pub enum ToolCallBlock {
     Lifecycle(LifecycleEventBlock),
 }
 
-/// Delegate to inner variant, with tool bullet prepended to output.
-macro_rules! delegate_tool {
-    ($self:expr, $method:ident ( $($arg:expr),* )) => {
-        match $self {
-            ToolCallBlock::Execute(b) => b.$method($($arg),*),
-            ToolCallBlock::Read(b) => b.$method($($arg),*),
-            ToolCallBlock::Edit(b) => b.$method($($arg),*),
-            ToolCallBlock::ListDir(b) => b.$method($($arg),*),
-            ToolCallBlock::Search(b) => b.$method($($arg),*),
-            ToolCallBlock::WebFetch(b) => b.$method($($arg),*),
-            ToolCallBlock::WebSearch(b) => b.$method($($arg),*),
-            ToolCallBlock::IntegrationSearch(b) => b.$method($($arg),*),
-            ToolCallBlock::UseTool(b) => b.$method($($arg),*),
-            ToolCallBlock::MemorySearch(b) => b.$method($($arg),*),
-            ToolCallBlock::Skill(b) => b.$method($($arg),*),
-            ToolCallBlock::Other(b) => b.$method($($arg),*),
-            ToolCallBlock::Lifecycle(b) => b.$method($($arg),*),
-        }
-    };
-}
-
+#[whichever::dispatch]
 impl BlockContent for ToolCallBlock {
-    fn output(&self, ctx: &BlockContext) -> BlockOutput {
-        // Bullet prepending is handled by RenderBlock::output() via has_bullet().
-        delegate_tool!(self, output(ctx))
-    }
-
-    fn accent(&self, ctx: &BlockContext) -> Option<AccentStyle> {
-        delegate_tool!(self, accent(ctx))
-    }
-
-    fn bullet(&self, ctx: &BlockContext) -> Option<AccentStyle> {
-        delegate_tool!(self, bullet(ctx))
-    }
-
-    fn accent_background(&self, ctx: &BlockContext) -> bool {
-        delegate_tool!(self, accent_background(ctx))
-    }
-
-    fn background(&self, ctx: &BlockContext) -> BlockBackground {
-        delegate_tool!(self, background(ctx))
-    }
-
-    fn has_vpad_for(&self, appearance: &AppearanceConfig) -> bool {
-        delegate_tool!(self, has_vpad_for(appearance))
-    }
-
-    fn has_raw_mode(&self) -> bool {
-        delegate_tool!(self, has_raw_mode())
-    }
-
-    fn is_foldable(&self) -> bool {
-        delegate_tool!(self, is_foldable())
-    }
-
-    fn next_fold_mode(&self, current: DisplayMode, is_running: bool) -> DisplayMode {
-        delegate_tool!(self, next_fold_mode(current, is_running))
-    }
-
-    fn collapse_mode(&self, is_running: bool) -> DisplayMode {
-        delegate_tool!(self, collapse_mode(is_running))
-    }
-
-    fn default_display_mode(&self) -> DisplayMode {
-        delegate_tool!(self, default_display_mode())
-    }
-
-    fn finished_display_mode(&self) -> Option<DisplayMode> {
-        delegate_tool!(self, finished_display_mode())
-    }
-
-    fn is_selectable(&self) -> bool {
-        delegate_tool!(self, is_selectable())
-    }
-
     fn has_bullet(&self, ctx: &BlockContext) -> bool {
         ctx.appearance
             .scrollback
@@ -273,26 +205,6 @@ impl BlockContent for ToolCallBlock {
 
     fn is_groupable(&self) -> bool {
         true
-    }
-
-    fn image_references(&self) -> &[rutui_theme::prompt_images::ScrollbackImageRef] {
-        delegate_tool!(self, image_references())
-    }
-
-    fn video_references(&self) -> &[rutui_theme::prompt_images::ScrollbackVideoRef] {
-        delegate_tool!(self, video_references())
-    }
-
-    fn inline_media(&self) -> Option<rutui_theme::prompt_images::InlineMediaInfo> {
-        delegate_tool!(self, inline_media())
-    }
-
-    fn inline_open_button(&self) -> Option<(std::path::PathBuf, bool)> {
-        delegate_tool!(self, inline_open_button())
-    }
-
-    fn preamble(&self, ctx: &BlockContext) -> Option<ratatui::text::Text<'static>> {
-        delegate_tool!(self, preamble(ctx))
     }
 }
 
