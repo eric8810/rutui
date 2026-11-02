@@ -361,9 +361,10 @@ impl BlockContent for StubBlock {
 
 /// RenderBlock enum wrapping all block types.
 ///
-/// BlockContent is manually implemented (not via enum_delegate) so we can
-/// intercept `output()` to conditionally prepend bullets based on `has_bullet()`.
+/// BlockContent is forwarded to the inner block, except `output()`, which
+/// conditionally prepends a bullet based on `has_bullet()`.
 #[derive(Debug, Clone)]
+#[whichever::dispatch]
 pub enum RenderBlock {
     /// Stub block for testing.
     Stub(StubBlock),
@@ -390,27 +391,6 @@ pub enum RenderBlock {
     ContextInfo(ContextInfoBlock),
     /// Credit-limit card for max-tier users (red accent, single action).
     CreditLimit(CreditLimitBlock),
-}
-
-/// Delegate a method call to the inner block variant.
-macro_rules! delegate_block {
-    ($self:expr, $method:ident ( $($arg:expr),* )) => {
-        match $self {
-            RenderBlock::Stub(b) => b.$method($($arg),*),
-            RenderBlock::UserPrompt(b) => b.$method($($arg),*),
-            RenderBlock::AgentMessage(b) => b.$method($($arg),*),
-            RenderBlock::ToolCall(b) => b.$method($($arg),*),
-            RenderBlock::Thinking(b) => b.$method($($arg),*),
-            RenderBlock::System(b) => b.$method($($arg),*),
-            RenderBlock::SessionEvent(b) => b.$method($($arg),*),
-            RenderBlock::BgTask(b) => b.$method($($arg),*),
-            RenderBlock::Subagent(b) => b.$method($($arg),*),
-            RenderBlock::Workflow(b) => b.$method($($arg),*),
-            RenderBlock::Btw(b) => b.$method($($arg),*),
-            RenderBlock::ContextInfo(b) => b.$method($($arg),*),
-            RenderBlock::CreditLimit(b) => b.$method($($arg),*),
-        }
-    };
 }
 
 fn plain_text_from_output(
@@ -455,7 +435,12 @@ pub fn join_searchable(parts: impl IntoIterator<Item = Option<String>>) -> Optio
     (!joined.is_empty()).then_some(joined)
 }
 
+#[whichever::dispatch]
 impl RenderBlock {
+    /// The inner block's `output()`, without the bullet.
+    #[dispatch(*, call = output)]
+    fn payload_output(&self, ctx: &BlockContext) -> BlockOutput;
+
     pub fn rendered_output(&self, ctx: &BlockContext) -> RenderedBlockOutput {
         let RenderBlock::ToolCall(ToolCallBlock::Edit(edit)) = self else {
             return RenderedBlockOutput::from(self.output(ctx));
@@ -468,102 +453,14 @@ impl RenderBlock {
     }
 }
 
+#[whichever::dispatch]
 impl BlockContent for RenderBlock {
     fn output(&self, ctx: &BlockContext) -> BlockOutput {
-        let mut output = delegate_block!(self, output(ctx));
-        if delegate_block!(self, has_bullet(ctx)) {
-            let bullet = delegate_block!(self, bullet(ctx));
-            prepend_bullet(&mut output, ctx, bullet);
+        let mut output = self.payload_output(ctx);
+        if self.has_bullet(ctx) {
+            prepend_bullet(&mut output, ctx, self.bullet(ctx));
         }
         output
-    }
-
-    fn accent(&self, ctx: &BlockContext) -> Option<AccentStyle> {
-        delegate_block!(self, accent(ctx))
-    }
-
-    fn bullet(&self, ctx: &BlockContext) -> Option<AccentStyle> {
-        delegate_block!(self, bullet(ctx))
-    }
-
-    fn accent_background(&self, ctx: &BlockContext) -> bool {
-        delegate_block!(self, accent_background(ctx))
-    }
-
-    fn background(&self, ctx: &BlockContext) -> BlockBackground {
-        delegate_block!(self, background(ctx))
-    }
-
-    fn has_vpad_for(&self, appearance: &AppearanceConfig) -> bool {
-        delegate_block!(self, has_vpad_for(appearance))
-    }
-
-    fn has_raw_mode(&self) -> bool {
-        delegate_block!(self, has_raw_mode())
-    }
-
-    fn is_foldable(&self) -> bool {
-        delegate_block!(self, is_foldable())
-    }
-
-    fn next_fold_mode(&self, current: DisplayMode, is_running: bool) -> DisplayMode {
-        delegate_block!(self, next_fold_mode(current, is_running))
-    }
-
-    fn collapse_mode(&self, is_running: bool) -> DisplayMode {
-        delegate_block!(self, collapse_mode(is_running))
-    }
-
-    fn default_display_mode(&self) -> DisplayMode {
-        delegate_block!(self, default_display_mode())
-    }
-
-    fn finished_display_mode(&self) -> Option<DisplayMode> {
-        delegate_block!(self, finished_display_mode())
-    }
-
-    fn is_selectable(&self) -> bool {
-        delegate_block!(self, is_selectable())
-    }
-
-    fn has_bullet(&self, ctx: &BlockContext) -> bool {
-        delegate_block!(self, has_bullet(ctx))
-    }
-
-    fn is_groupable(&self) -> bool {
-        delegate_block!(self, is_groupable())
-    }
-
-    fn preamble(&self, ctx: &BlockContext) -> Option<Text<'static>> {
-        delegate_block!(self, preamble(ctx))
-    }
-
-    fn image_references(&self) -> &[rutui_theme::prompt_images::ScrollbackImageRef] {
-        delegate_block!(self, image_references())
-    }
-
-    fn video_references(&self) -> &[rutui_theme::prompt_images::ScrollbackVideoRef] {
-        delegate_block!(self, video_references())
-    }
-
-    fn inline_media(&self) -> Option<InlineMediaInfo> {
-        delegate_block!(self, inline_media())
-    }
-
-    fn inline_media_placements(&self, ctx: &BlockContext) -> Vec<AnchoredMedia> {
-        delegate_block!(self, inline_media_placements(ctx))
-    }
-
-    fn diagram_affordances(&self, ctx: &BlockContext) -> Vec<DiagramAffordance> {
-        delegate_block!(self, diagram_affordances(ctx))
-    }
-
-    fn estimate_extra_rows(&self) -> u16 {
-        delegate_block!(self, estimate_extra_rows())
-    }
-
-    fn inline_open_button(&self) -> Option<(std::path::PathBuf, bool)> {
-        delegate_block!(self, inline_open_button())
     }
 }
 
