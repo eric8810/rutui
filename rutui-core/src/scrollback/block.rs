@@ -7,10 +7,6 @@ use crate::diff::DiffHunk;
 use crate::inline_media::inline_media_reserved_rows;
 use rutui_theme::appearance::AppearanceConfig;
 use rutui_theme::prompt_images::{InlineMediaInfo, ScrollbackImageRef, ScrollbackVideoRef};
-// Imported (rather than referenced as `crate::…`) so the default trait method
-// below stays free of `crate::` tokens: `#[enum_delegate::register]` captures
-// default method bodies into a generated macro, where `crate::` trips
-// `clippy::crate_in_macro_def`.
 
 use super::blocks::mermaid_content::DiagramAffordance;
 use super::blocks::{
@@ -45,13 +41,13 @@ pub struct AnchoredMedia {
 
 /// Trait for block content description.
 ///
-/// Each block type implements this trait. The RenderBlock enum delegates to
-/// the inner type automatically via enum_delegate.
+/// Each block type implements this trait. The RenderBlock and ToolCallBlock
+/// enums forward it to the inner type.
 ///
 /// Note: This trait describes *what* to render (content, styles, padding).
 /// Actual rendering to a Buffer is done via the `Renderable` trait from
 /// `ui/render/renderable.rs`.
-#[enum_delegate::register]
+#[whichever::dispatchable]
 pub trait BlockContent {
     /// Produce renderable content for the given context.
     fn output(&self, ctx: &BlockContext) -> BlockOutput;
