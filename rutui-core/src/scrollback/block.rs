@@ -464,6 +464,7 @@ impl BlockContent for RenderBlock {
     }
 }
 
+#[whichever::dispatch]
 impl RenderBlock {
     /// Create a stub block (groupable by default).
     pub fn stub(text: impl Into<String>, accent_color: ratatui::style::Color) -> Self {
@@ -1109,13 +1110,8 @@ impl RenderBlock {
     ///
     /// This should be called before `output()` when the raw mode might have changed.
     /// Only affects AgentMessage and Thinking blocks; other blocks ignore this.
-    pub fn set_raw_mode(&mut self, raw: bool) {
-        match self {
-            RenderBlock::AgentMessage(block) => block.set_raw_mode(raw),
-            RenderBlock::Thinking(block) => block.set_raw_mode(raw),
-            _ => {} // Other blocks don't support raw mode
-        }
-    }
+    #[dispatch(AgentMessage, Thinking)]
+    pub fn set_raw_mode(&mut self, _raw: bool) {}
 }
 
 #[cfg(test)]
